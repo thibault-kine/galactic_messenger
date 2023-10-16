@@ -1,0 +1,1 @@
+localhost:8080/h2-console in a browser to access h2.
