@@ -12,11 +12,12 @@ import galactic_messenger.app.models.UserEntity;
 @Service
 public class UserService {
 
+    @Autowired
     private UserRepository userRepo;
 
     @Autowired
-    public UserService(UserRepository usrRepo) {
-        this.userRepo = usrRepo;
+    public UserService(UserRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     // #region POST
@@ -33,6 +34,8 @@ public class UserService {
 
     private void saveUser(UserEntity user) {
         userRepo.save(user);
+        userRepo.flush();
+        System.out.println("ici");
     }
 
     private String hashPassword(String rawPassword) {
