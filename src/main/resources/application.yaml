@@ -10,8 +10,8 @@ spring:
         
     security:
         user:  
-            name: abraham
-            password: abraham
+            name: admin
+            password: admin
 
     h2:
         console.enabled: true

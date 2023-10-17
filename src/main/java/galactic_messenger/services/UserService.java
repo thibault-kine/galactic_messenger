@@ -18,20 +18,29 @@ public class UserService {
     public UserService(UserRepository repo) { this.repo = repo; }
 
 
-    // POST
+    // #region POST
+
+    /**
+     * Créé un utilisateur et hashe son mot de passe brut
+     * @param username - Pseudo utilisateur
+     * @param rawPassword - Mot de passe brut. Sera hashé par la suite
+     */
     public void createUser(String username, String rawPassword) {
         saveUser(new UserEntity(username, hashPassword(rawPassword)));
     }
-
+    
     private void saveUser(UserEntity user) {
         repo.save(user);
     }
-
+    
     private String hashPassword(String rawPassword) {
         return new BCryptPasswordEncoder().encode(rawPassword);
     }
 
-    // GET
+    // #endregion
+
+    // #region GET
+    
     public UserEntity getById(int id) {
         return repo.findById(id).get();
     }
@@ -40,8 +49,13 @@ public class UserService {
         return repo.findAll();
     }
 
-    // DELETE
+    // #endregion
+
+    // #region DELETE
+    
     public void delete(int id) {
         repo.delete(getById(id));
     }
+
+    //#endregion
 }
