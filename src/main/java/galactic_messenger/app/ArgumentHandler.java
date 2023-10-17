@@ -70,7 +70,7 @@ public class ArgumentHandler {
         System.out.println("=== MENU D'AIDE ===\n");
         System.out.printf("Pour afficher toutes les commandes : \n\t %s\n", HELP_CMD);
         System.out.printf("Pour quitter le serveur : \n\t %s\n", QUIT_CMD);
-        System.out.printf("Pour se connecter : \n\t %s %s %s\n", LOGIN_CMD, LOGIN_ARGS[0], LOGIN_ARGS[1]);
-        System.out.printf("Pour s'inscrire : \n\t %s %s %s\n", REGISTER_CMD, REGISTER_ARGS[0], REGISTER_ARGS[1]);
+        System.out.printf("Pour se connecter : \n\t %s %s %s (EN COURS)\n", LOGIN_CMD, LOGIN_ARGS[0], LOGIN_ARGS[1]);
+        System.out.printf("Pour s'inscrire : \n\t %s %s %s (EN COURS)\n", REGISTER_CMD, REGISTER_ARGS[0], REGISTER_ARGS[1]);
     }
 }
