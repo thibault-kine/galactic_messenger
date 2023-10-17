@@ -4,17 +4,19 @@ import java.util.Scanner;
 
 public class ArgumentHandler {
 
-    final public String LOGIN_CMD = "/login";
-    final private String[] LOGIN_ARGS = { "<username>", "<password>" };
-
-    final public String REGISTER_CMD = "/register";
-    final private String[] REGISTER_ARGS = { "<username>", "<password>" };
-
     final public String HELP_CMD = "/help";
 
     final public String QUIT_CMD = "/quit";
+    
+    final public String REGISTER_CMD = "/register";
+    final private String[] REGISTER_ARGS = { "<username>", "<password>" };
 
+    final public String LOGIN_CMD = "/login";
+    final private String[] LOGIN_ARGS = { "<username>", "<password>" };
 
+    /**
+     * Démarre la console du serveur
+     */
     public void run() {
         Scanner sc = new Scanner(System.in);
         System.out.print("\n");
