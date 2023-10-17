@@ -1,7 +1,7 @@
-package galactic_messenger.interfaces;
+package galactic_messenger.app.interfaces;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import galactic_messenger.models.UserEntity;
+import galactic_messenger.app.models.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> { }

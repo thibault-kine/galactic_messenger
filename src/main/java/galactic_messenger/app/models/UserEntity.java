@@ -1,9 +1,12 @@
-package galactic_messenger.models;
+package galactic_messenger.app.models;
+
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GenerationType;
 
 @Entity
@@ -20,6 +23,9 @@ public class UserEntity {
     // Mot de passe hashé
     @Column
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<MessageEntity> messages;
 
     protected UserEntity() {}
 

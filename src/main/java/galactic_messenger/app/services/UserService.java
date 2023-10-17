@@ -1,4 +1,4 @@
-package galactic_messenger.services;
+package galactic_messenger.app.services;
 
 import java.util.List;
 
@@ -6,33 +6,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import galactic_messenger.interfaces.UserRepository;
-import galactic_messenger.models.UserEntity;
+import galactic_messenger.app.interfaces.UserRepository;
+import galactic_messenger.app.models.UserEntity;
 
 @Service
 public class UserService {
 
-    private UserRepository repo;
+    private UserRepository userRepo;
 
     @Autowired
-    public UserService(UserRepository repo) { this.repo = repo; }
-
+    public UserService(UserRepository usrRepo) {
+        this.userRepo = usrRepo;
+    }
 
     // #region POST
 
     /**
      * Créé un utilisateur et hashe son mot de passe brut
-     * @param username - Pseudo utilisateur
+     * 
+     * @param username    - Pseudo utilisateur
      * @param rawPassword - Mot de passe brut. Sera hashé par la suite
      */
     public void createUser(String username, String rawPassword) {
         saveUser(new UserEntity(username, hashPassword(rawPassword)));
     }
-    
+
     private void saveUser(UserEntity user) {
-        repo.save(user);
+        userRepo.save(user);
     }
-    
+
     private String hashPassword(String rawPassword) {
         return new BCryptPasswordEncoder().encode(rawPassword);
     }
@@ -40,22 +42,22 @@ public class UserService {
     // #endregion
 
     // #region GET
-    
+
     public UserEntity getById(int id) {
-        return repo.findById(id).get();
+        return userRepo.findById(id).get();
     }
 
     public List<UserEntity> getAll() {
-        return repo.findAll();
+        return userRepo.findAll();
     }
 
     // #endregion
 
     // #region DELETE
-    
+
     public void delete(int id) {
-        repo.delete(getById(id));
+        userRepo.delete(getById(id));
     }
 
-    //#endregion
+    // #endregion
 }
