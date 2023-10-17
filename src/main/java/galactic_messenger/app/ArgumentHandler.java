@@ -55,6 +55,8 @@ public class ArgumentHandler {
                 System.out.printf("Commande inconnue: '%s'\nVeuillez vous référer à '%s'.\n", cmd, HELP_CMD);
             }
         }
+
+        sc.close();
     }
 
     private void handleLogin(String username, String password) {
