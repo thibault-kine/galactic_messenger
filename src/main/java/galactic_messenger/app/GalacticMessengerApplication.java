@@ -55,5 +55,10 @@ public class GalacticMessengerApplication {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+
+        ArgumentHandler argumentHandler = new ArgumentHandler();
+        argumentHandler.run();
+
+        context.close();
     }
 }
