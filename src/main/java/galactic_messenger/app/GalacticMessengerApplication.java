@@ -30,7 +30,7 @@ public class GalacticMessengerApplication {
         }
 
         // Démarre la console du serveur
-        ArgumentHandler argumentHandler = new ArgumentHandler();
+        ArgumentHandler argumentHandler = new ArgumentHandler(port);
         argumentHandler.run();
 
         context.close();

@@ -10,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 public class ArgumentHandler {
 
+    private int port = 8080;
+
     final public String HELP_CMD = "/help";
 
     final public String QUIT_CMD = "/quit";
@@ -20,8 +22,8 @@ public class ArgumentHandler {
     final public String LOGIN_CMD = "/login";
     final private String[] LOGIN_ARGS = { "<username>", "<password>" };
 
-    public ArgumentHandler() {
-        
+    public ArgumentHandler(int port) {
+        this.port = port;
     }
 
     /**
@@ -79,6 +81,8 @@ public class ArgumentHandler {
     }
 
     private void handleRegister(String username, String password) {
+        String registerUrl = String.format("http://localhost:%d/user/register", this.port);
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -88,7 +92,7 @@ public class ArgumentHandler {
         map.add("password", password);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
-        restTemplate.postForObject("http://localhost:1234/user/register", req, Void.class, map);
+        restTemplate.postForObject(registerUrl, req, Void.class, map);
     }
 
     private void handleHelp() {
