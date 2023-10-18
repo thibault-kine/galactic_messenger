@@ -8,6 +8,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import galactic_messenger.app.server.ServerConsoleHandler;
+
 @SpringBootApplication
 public class GalacticMessengerApplication {
 
@@ -30,7 +32,7 @@ public class GalacticMessengerApplication {
         }
 
         // Démarre la console du serveur
-        ArgumentHandler argumentHandler = new ArgumentHandler(port);
+        ServerConsoleHandler argumentHandler = new ServerConsoleHandler(port);
         argumentHandler.run();
 
         context.close();

@@ -3,6 +3,8 @@ package galactic_messenger.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -28,14 +30,13 @@ public class UserService {
      * @param username    - Pseudo utilisateur
      * @param rawPassword - Mot de passe brut. Sera hashé par la suite
      */
-    public void createUser(String username, String rawPassword) {
-        saveUser(new UserEntity(username, hashPassword(rawPassword)));
-    }
-
-    private void saveUser(UserEntity user) {
-        userRepo.save(user);
-        userRepo.flush();
-        System.out.println("ici");
+    public void createUser(String username, String password) {
+        if(isUsernameUnique(username)) {
+            userRepo.saveAndFlush(new UserEntity(username, hashPassword(password)));
+        }
+        else {
+            System.out.println("Cet username est déjà pris");
+        }
     }
 
     private String hashPassword(String rawPassword) {
@@ -46,12 +47,34 @@ public class UserService {
 
     // #region GET
 
-    public UserEntity getById(int id) {
+    public UserEntity findById(int id) {
         return userRepo.findById(id).get();
     }
 
-    public List<UserEntity> getAll() {
+    public List<UserEntity> findAll() {
         return userRepo.findAll();
+    }
+
+    public UserEntity findByLogin(String username, String rawPassword) {
+        List<UserEntity> all = findAll();
+        for(UserEntity u : all) {
+            if(u.getUsername().equals(username) && new BCryptPasswordEncoder().matches(rawPassword, u.getPassword())) {
+                return u;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean isUsernameUnique(String username) {
+        List<UserEntity> all = findAll();
+        for(UserEntity u : all) {
+            if(u.getUsername().equals(username)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // #endregion
@@ -59,7 +82,7 @@ public class UserService {
     // #region DELETE
 
     public void delete(int id) {
-        userRepo.delete(getById(id));
+        userRepo.delete(findById(id));
     }
 
     // #endregion

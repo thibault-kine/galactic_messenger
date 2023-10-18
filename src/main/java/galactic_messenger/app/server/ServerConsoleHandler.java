@@ -1,4 +1,4 @@
-package galactic_messenger.app;
+package galactic_messenger.app.server;
 
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -8,9 +8,10 @@ import java.util.Scanner;
 
 import org.springframework.web.client.RestTemplate;
 
-public class ArgumentHandler {
+public class ServerConsoleHandler {
 
     private int port = 8080;
+    private String serverUrl;
 
     final public String HELP_CMD = "/help";
 
@@ -22,8 +23,12 @@ public class ArgumentHandler {
     final public String LOGIN_CMD = "/login";
     final private String[] LOGIN_ARGS = { "<username>", "<password>" };
 
-    public ArgumentHandler(int port) {
+    final public String PROFILE_CMD = "/profile";
+
+
+    public ServerConsoleHandler(int port) {
         this.port = port;
+        this.serverUrl = String.format("http://localhost:%d", this.port);
     }
 
     /**
@@ -62,6 +67,10 @@ public class ArgumentHandler {
                     }
                     break;
                 
+                // PROFILE_CMD
+                case PROFILE_CMD:
+                    
+                
                 // QUIT_CMD
                 case QUIT_CMD:
                     running = false;
@@ -77,12 +86,6 @@ public class ArgumentHandler {
     }
 
     private void handleLogin(String username, String password) {
-
-    }
-
-    private void handleRegister(String username, String password) {
-        String registerUrl = String.format("http://localhost:%d/user/register", this.port);
-
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -92,13 +95,30 @@ public class ArgumentHandler {
         map.add("password", password);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
-        restTemplate.postForObject(registerUrl, req, Void.class, map);
+        restTemplate.postForObject(this.serverUrl + "/user/login", req, Void.class, map);
+        
+    }
+
+    private void handleRegister(String username, String password) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("username", username);
+        map.add("password", password);
+
+        HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
+        restTemplate.postForObject(this.serverUrl + "/user/register", req, Void.class, map);
+    }
+
+    private void handleProfile() {
+        System.out.println("\n=== PROFIL ===\n");
+
     }
 
     private void handleHelp() {
-        System.out.println("\n");
-
-        System.out.println("=== MENU D'AIDE ===\n");
+        System.out.println("\n=== MENU D'AIDE ===\n");
         System.out.printf("Pour afficher toutes les commandes : \n\t %s\n", HELP_CMD);
         System.out.printf("Pour quitter le serveur : \n\t %s\n", QUIT_CMD);
         System.out.printf("Pour se connecter : \n\t %s %s %s (EN COURS ! NE PAS UTILISER)\n", LOGIN_CMD, LOGIN_ARGS[0],

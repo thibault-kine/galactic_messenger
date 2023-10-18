@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import galactic_messenger.app.models.UserEntity;
 import galactic_messenger.app.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class UserController {
@@ -19,23 +21,29 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    public String allUsers() {
-        List<UserEntity> users = service.getAll();
-        try {
-            return new ObjectMapper().writeValueAsString(users);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    @Autowired
+    private HttpServletRequest request;
 
-        return "No user found :(";
-    }
+    @Autowired
+    public HttpSession session;
 
     @PostMapping("/user/register")
     public void UserRegister(@RequestParam("username") String username, @RequestParam("password") String password) {
         service.createUser(username, password);
     }
 
+    @PostMapping("/user/login")
     public void UserLogin(@RequestParam("username") String username, @RequestParam("password") String password) {
-        
+        UserEntity user = service.findByLogin(username, password);
+        System.out.println("findByLogin ok");
+        if(user != null) {
+            // HttpSession session = request.getSession(false);
+            System.out.println("user existe");
+            session.setAttribute("user", user);
+            System.out.println("Session : " + session.getAttribute("user"));
+        }
+        else {
+            System.out.println("user null");
+        }
     }
 }

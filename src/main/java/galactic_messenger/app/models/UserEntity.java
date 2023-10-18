@@ -20,7 +20,7 @@ public class UserEntity {
     @Column
     private String username;
 
-    // Mot de passe hashé
+    // Mot de passe non-hashé
     @Column
     private String password;
 
@@ -31,7 +31,7 @@ public class UserEntity {
 
     /**
      * @param username - Le pseudo utilisateur
-     * @param password - Le mot de passe hashé
+     * @param password - Le mot de passe non-hashé
      */
     public UserEntity(String username, String password) {
         this.username = username;
@@ -40,7 +40,7 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return this.username;
+        return String.format("#%d - %s ; %s", this.id, this.username, this.password);
     }
 
     public int getId() {
@@ -51,7 +51,7 @@ public class UserEntity {
         return this.username;
     }
 
-    public String getHashedPassword() {
+    public String getPassword() {
         return this.password;
     }
 }
