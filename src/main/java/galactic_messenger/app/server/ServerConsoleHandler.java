@@ -27,6 +27,9 @@ public class ServerConsoleHandler {
     final public String LOGIN_CMD = "/login";
     final private String[] LOGIN_ARGS = { "<username>", "<password>" };
 
+    final public String LOGOUT_CMD = "/logout";
+
+
     public ServerConsoleHandler(int port) {
         this.port = port;
         this.serverUrl = String.format("http://localhost:%d", this.port);
@@ -72,6 +75,13 @@ public class ServerConsoleHandler {
                         System.out.printf("Pour se connecter : \n\t %s %s %s\n", LOGIN_CMD, args[0], args[1]);
                     } else {
                         handleLogin(args[1], args[2]);
+                    }
+                    break;
+                
+                case LOGOUT_CMD:
+                    if(Session.get("current_user") != null) {
+                        Session.remove("current_user");
+                        System.out.println("Vous avez été déconnecté.");
                     }
                     break;
 
@@ -127,13 +137,5 @@ public class ServerConsoleHandler {
             REGISTER_CMD, REGISTER_ARGS[0], REGISTER_ARGS[1]);
 
         System.out.println("\n");
-    }
-
-    private HttpSession getSession() {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
-
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        return restTemplate.getForObject(this.serverUrl + "/get-session", HttpSession.class);
     }
 }
