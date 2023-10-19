@@ -8,9 +8,10 @@ import java.util.Scanner;
 
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.json.JsonObject;
 import main.java.galactic_messenger.app.models.UserEntity;
 
-import jakarta.json.JsonObject;
+
 
 public class ConsoleHandler {
 

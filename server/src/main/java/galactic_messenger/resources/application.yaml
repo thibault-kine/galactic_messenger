@@ -1,10 +1,15 @@
 spring:
     datasource:
         initialization-mode: always
-        url: jdbc:h2:file:./galactic_database;
+        url: jdbc:h2:file:./server/src/galactic_database;
         driverClassName: org.h2.Driver
         username: admin
         password: admin
+    h2:
+        console:
+            enabled: true
+            settings:
+                web-allow-others: true
     
     flyway:
         enabled: true
@@ -20,8 +25,3 @@ spring:
             name: admin
             password: admin
 
-    h2:
-        console:
-            enabled: true
-            settings:
-                web-allow-others: true

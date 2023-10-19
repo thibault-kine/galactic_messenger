@@ -13,7 +13,7 @@ sourceSets {
 
 bootJar {
     archiveFileName = 'galactic_messenger_server.jar'
-    mainClass = 'main.Main'
+    mainClass = 'main.java.galactic_messenger.app.GalacticMessengerApplication'
     destinationDirectory = file('../build/libs')
 }
 
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':common')
+
 
     // implementation 'com.fasterxml.jackson.core:jackson-core:2.15.3'
     // implementation "org.springframework.boot:spring-boot-starter-security"
@@ -48,6 +48,11 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config:4.0.4'
     implementation 'org.springframework.cloud:spring-cloud-config-client:4.0.4'
     implementation 'org.springframework.cloud:spring-cloud-config-server:4.0.4'
+
+    implementation 'jakarta.json:jakarta.json-api:2.1.2'
+    implementation 'org.springframework.security:spring-security-crypto:6.1.5'
+
+    implementation project(':common')
 }
 
 tasks.named('test') {

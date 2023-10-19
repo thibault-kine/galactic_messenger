@@ -18,6 +18,6 @@ sourceSets {
 
 bootJar {
     archiveFileName = 'galactic_messenger_client.jar'
-    mainClass = 'main.Main'
+    mainClass = 'main.java.galactic_messenger.app.GalacticMessengerApplication'
     destinationDirectory = file('../build/libs')
 }
