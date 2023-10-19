@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import galactic_messenger.app.Session;
 import galactic_messenger.app.models.UserEntity;
 import galactic_messenger.app.services.UserService;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 @RestController
 @RequestMapping("/user")
@@ -27,10 +29,13 @@ public class UserController {
     @PostMapping("/login")
     public void UserLogin(@RequestParam("username") String username, @RequestParam("password") String password) {
         UserEntity user = service.findByLogin(username, password);
-        if (user != null) {
-            Session.set("current_user", user);
-        } else {
-            System.out.println("Impossible de se connecter");
-        }
+        
+        Session.set("current_user", user);
+    }
+
+    @PostMapping("/logout") 
+    public void UserLogout() {
+        Session.remove("current_user");
+        System.out.println("Vous avez bien été déconnecté\n");
     }
 }
