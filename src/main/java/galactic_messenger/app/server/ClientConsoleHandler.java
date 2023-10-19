@@ -1,5 +1,6 @@
 package galactic_messenger.app.server;
 
+import java.net.*;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -12,9 +13,10 @@ import galactic_messenger.app.Session;
 import galactic_messenger.app.models.UserEntity;
 import jakarta.servlet.http.HttpSession;
 
-public class ServerConsoleHandler {
+public class ClientConsoleHandler {
 
     private int port = 8080;
+    private InetAddress serverIp;
     private String serverUrl;
 
     final public String HELP_CMD = "/help";
@@ -30,11 +32,16 @@ public class ServerConsoleHandler {
     final public String LOGOUT_CMD = "/logout";
 
 
-    public ServerConsoleHandler(int port) {
+    public ClientConsoleHandler(String serverIp, int port) {
+        try {
+            this.serverIp = Inet4Address.getByName(serverIp);
+        } catch (UnknownHostException e) {
+            System.err.println("Addresse IP du serveur invalide.");
+            System.exit(1);
+        }
         this.port = port;
         this.serverUrl = String.format("http://localhost:%d", this.port);
     }
-
     /**
      * Démarre la console du serveur
      */
