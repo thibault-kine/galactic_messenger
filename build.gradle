@@ -19,6 +19,7 @@ dependencies {
     // DEV
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.json:json:20231013'
     // implementation "org.springframework.boot:spring-boot-starter-security"
     // implementation 'org.springframework.security:spring-security-web:6.1.5'
 	

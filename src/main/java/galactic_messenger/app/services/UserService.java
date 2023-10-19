@@ -3,8 +3,6 @@ package galactic_messenger.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -25,16 +23,14 @@ public class UserService {
     // #region POST
 
     /**
-     * Créé un utilisateur et hashe son mot de passe brut
-     * 
+     * Créé un utilisateur et hashe son mot de passe brut 
      * @param username    - Pseudo utilisateur
      * @param rawPassword - Mot de passe brut. Sera hashé par la suite
      */
     public void createUser(String username, String password) {
-        if(isUsernameUnique(username)) {
+        if (isUsernameUnique(username)) {
             userRepo.saveAndFlush(new UserEntity(username, hashPassword(password)));
-        }
-        else {
+        } else {
             System.out.println("Cet username est déjà pris");
         }
     }
@@ -56,22 +52,17 @@ public class UserService {
     }
 
     public UserEntity findByLogin(String username, String rawPassword) {
-        List<UserEntity> all = findAll();
-        for(UserEntity u : all) {
-            if(u.getUsername().equals(username) && new BCryptPasswordEncoder().matches(rawPassword, u.getPassword())) {
-                return u;
-            }
+        UserEntity user = userRepo.findByUsername(username);
+        if(user != null && new BCryptPasswordEncoder().matches(rawPassword, user.getPassword())) {
+            return user;
         }
 
         return null;
     }
 
     private boolean isUsernameUnique(String username) {
-        List<UserEntity> all = findAll();
-        for(UserEntity u : all) {
-            if(u.getUsername().equals(username)) {
-                return false;
-            }
+        if(userRepo.findByUsername(username) != null) {
+            return false;
         }
 
         return true;

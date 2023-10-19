@@ -8,6 +8,10 @@ import java.util.Scanner;
 
 import org.springframework.web.client.RestTemplate;
 
+import galactic_messenger.app.Session;
+import galactic_messenger.app.models.UserEntity;
+import jakarta.servlet.http.HttpSession;
+
 public class ServerConsoleHandler {
 
     private int port = 8080;
@@ -23,9 +27,6 @@ public class ServerConsoleHandler {
     final public String LOGIN_CMD = "/login";
     final private String[] LOGIN_ARGS = { "<username>", "<password>" };
 
-    final public String PROFILE_CMD = "/profile";
-
-
     public ServerConsoleHandler(int port) {
         this.port = port;
         this.serverUrl = String.format("http://localhost:%d", this.port);
@@ -40,6 +41,13 @@ public class ServerConsoleHandler {
         boolean running = true;
 
         while (running) {
+
+            UserEntity u = Session.get("current_user") != null && Session.get("current_user").getClass() == UserEntity.class ? 
+                (UserEntity)Session.get("current_user") : null;
+
+            System.out.printf(
+                 "[ %s ] > ", u == null ? "INVITÉ" : u.getUsername().toUpperCase()
+            );
             String cmd = sc.nextLine();
             String[] args = cmd.split(" ");
 
@@ -57,7 +65,7 @@ public class ServerConsoleHandler {
                         handleRegister(args[1], args[2]);
                     }
                     break;
-                
+
                 // LOGIN_CMD
                 case LOGIN_CMD:
                     if (args.length != REGISTER_ARGS.length + 1) {
@@ -66,16 +74,12 @@ public class ServerConsoleHandler {
                         handleLogin(args[1], args[2]);
                     }
                     break;
-                
-                // PROFILE_CMD
-                case PROFILE_CMD:
-                    
-                
+
                 // QUIT_CMD
                 case QUIT_CMD:
                     running = false;
                     break;
-                
+
                 default:
                     System.out.printf("Commande inconnue: '%s'\nVeuillez vous référer à '%s'.\n", cmd, HELP_CMD);
                     break;
@@ -95,8 +99,7 @@ public class ServerConsoleHandler {
         map.add("password", password);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
-        restTemplate.postForObject(this.serverUrl + "/user/login", req, Void.class, map);
-        
+        restTemplate.postForObject(this.serverUrl + "/user/login", req, HttpSession.class, map);
     }
 
     private void handleRegister(String username, String password) {
@@ -112,20 +115,25 @@ public class ServerConsoleHandler {
         restTemplate.postForObject(this.serverUrl + "/user/register", req, Void.class, map);
     }
 
-    private void handleProfile() {
-        System.out.println("\n=== PROFIL ===\n");
-
-    }
-
     private void handleHelp() {
         System.out.println("\n=== MENU D'AIDE ===\n");
         System.out.printf("Pour afficher toutes les commandes : \n\t %s\n", HELP_CMD);
         System.out.printf("Pour quitter le serveur : \n\t %s\n", QUIT_CMD);
-        System.out.printf("Pour se connecter : \n\t %s %s %s (EN COURS ! NE PAS UTILISER)\n", LOGIN_CMD, LOGIN_ARGS[0],
-                LOGIN_ARGS[1]);
-        System.out.printf("Pour s'inscrire : \n\t %s %s %s (EN COURS ! NE PAS UTILISER)\n", REGISTER_CMD,
-                REGISTER_ARGS[0], REGISTER_ARGS[1]);
+        System.out.printf(
+            "Pour se connecter : \n\t %s %s %s (EN COURS ! NE PAS UTILISER)\n", 
+            LOGIN_CMD, LOGIN_ARGS[0],LOGIN_ARGS[1]);
+        System.out.printf(
+            "Pour s'inscrire : \n\t %s %s %s\n", 
+            REGISTER_CMD, REGISTER_ARGS[0], REGISTER_ARGS[1]);
 
         System.out.println("\n");
+    }
+
+    private HttpSession getSession() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        return restTemplate.getForObject(this.serverUrl + "/get-session", HttpSession.class);
     }
 }
