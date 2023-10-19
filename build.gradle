@@ -1,0 +1,11 @@
+subprojects {
+    apply plugin: 'java'
+    java {
+        sourceCompatibility = JavaVersion.VERSION_20
+        targetCompatibility = JavaVersion.VERSION_20
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}

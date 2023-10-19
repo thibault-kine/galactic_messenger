@@ -1,4 +1,4 @@
-package galactic_messenger.app.controllers;
+package main.java.galactic_messenger.app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import galactic_messenger.app.Session;
-import galactic_messenger.app.models.UserEntity;
-import galactic_messenger.app.services.UserService;
+import main.java.galactic_messenger.app.Session;
+import main.java.galactic_messenger.app.models.UserEntity;
+import main.java.galactic_messenger.app.services.UserService;
+
 
 @RestController
 @RequestMapping("/user")

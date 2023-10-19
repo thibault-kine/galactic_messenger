@@ -1,4 +1,4 @@
-package galactic_messenger.app;
+package main.java.galactic_messenger.app;
 
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -8,7 +8,8 @@ import java.util.Scanner;
 
 import org.springframework.web.client.RestTemplate;
 
-import galactic_messenger.app.models.UserEntity;
+import main.java.galactic_messenger.app.models.UserEntity;
+
 import jakarta.json.JsonObject;
 
 public class ConsoleHandler {

@@ -1,4 +1,4 @@
-package galactic_messenger.app.models;
+package main.java.galactic_messenger.app.models;
 
 import java.util.List;
 

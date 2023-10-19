@@ -1,4 +1,4 @@
-package galactic_messenger.app;
+package main.java.galactic_messenger.app;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

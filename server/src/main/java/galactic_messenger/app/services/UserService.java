@@ -1,13 +1,13 @@
-package galactic_messenger.app.services;
+package main.java.galactic_messenger.app.services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import galactic_messenger.app.interfaces.UserRepository;
-import galactic_messenger.app.models.UserEntity;
+import main.java.galactic_messenger.app.interfaces.UserRepository;
+import main.java.galactic_messenger.app.models.UserEntity;
 
 @Service
 public class UserService {
