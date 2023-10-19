@@ -1,4 +1,4 @@
-package galactic_messenger.app.server;
+package galactic_messenger.app;
 
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -8,12 +8,10 @@ import java.util.Scanner;
 
 import org.springframework.web.client.RestTemplate;
 
-import galactic_messenger.app.Session;
 import galactic_messenger.app.models.UserEntity;
 import jakarta.json.JsonObject;
-import jakarta.servlet.http.HttpSession;
 
-public class ServerConsoleHandler {
+public class ConsoleHandler {
 
     private int port = 8080;
     private String serverUrl;
@@ -30,7 +28,7 @@ public class ServerConsoleHandler {
 
     final public String LOGOUT_CMD = "/logout";
 
-    public ServerConsoleHandler(int port) {
+    public ConsoleHandler(int port) {
         this.port = port;
         this.serverUrl = String.format("http://localhost:%d", this.port);
     }

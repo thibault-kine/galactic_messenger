@@ -6,8 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import galactic_messenger.app.server.ServerConsoleHandler;
-
 @SpringBootApplication
 public class GalacticMessengerApplication {
 
@@ -28,7 +26,7 @@ public class GalacticMessengerApplication {
         System.out.printf("\nServer available at %s:%d\n", ip, port);
 
         // Démarre la console du serveur
-        ServerConsoleHandler argumentHandler = new ServerConsoleHandler(port);
+        ConsoleHandler argumentHandler = new ConsoleHandler(port);
         argumentHandler.run();
 
         context.close();

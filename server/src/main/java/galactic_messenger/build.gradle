@@ -4,7 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.3'
 }
 
-group = 'galactic_messenger'
+group = 'galactic_messenger_server'
 
 java {
 	sourceCompatibility = '20'
@@ -15,13 +15,6 @@ repositories {
 }
 
 dependencies {
-	
-    // DEV
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.json:json:20231013'                 //
-    implementation 'jakarta.json:jakarta.json-api:2.1.2'    //  JSON
-    testImplementation 'ch.qos.logback:logback-classic:1.4.11'
 
     // implementation 'com.fasterxml.jackson.core:jackson-core:2.15.3'
     // implementation "org.springframework.boot:spring-boot-starter-security"
