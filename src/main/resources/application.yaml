@@ -14,4 +14,7 @@ spring:
             password: admin
 
     h2:
-        console.enabled: true
+        console:
+            enabled: true
+            settings:
+                web-allow-others: true
