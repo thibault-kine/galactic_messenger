@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import galactic_messenger.app.Session;
 import galactic_messenger.app.models.UserEntity;
+import jakarta.json.JsonObject;
 import jakarta.servlet.http.HttpSession;
 
 public class ServerConsoleHandler {
@@ -29,7 +30,6 @@ public class ServerConsoleHandler {
 
     final public String LOGOUT_CMD = "/logout";
 
-
     public ServerConsoleHandler(int port) {
         this.port = port;
         this.serverUrl = String.format("http://localhost:%d", this.port);
@@ -45,12 +45,13 @@ public class ServerConsoleHandler {
 
         while (running) {
 
-            UserEntity u = Session.get("current_user") != null && Session.get("current_user").getClass() == UserEntity.class ? 
-                (UserEntity)Session.get("current_user") : null;
+            UserEntity u = Session.get("current_user") != null
+                    && Session.get("current_user").getClass() == UserEntity.class
+                            ? (UserEntity) Session.get("current_user")
+                            : null;
 
             System.out.printf(
-                 "[ %s ] > ", u == null ? "INVITÉ" : u.getUsername().toUpperCase()
-            );
+                    "[ %s ] > ", u == null ? "INVITÉ" : u.getUsername().toUpperCase());
             String cmd = sc.nextLine();
             String[] args = cmd.split(" ");
 
@@ -77,11 +78,10 @@ public class ServerConsoleHandler {
                         handleLogin(args[1], args[2]);
                     }
                     break;
-                
+
                 case LOGOUT_CMD:
-                    if(Session.get("current_user") != null) {
-                        Session.remove("current_user");
-                        System.out.println("Vous avez été déconnecté.");
+                    if (Session.get("current_user") != null) {
+                        handleLogout();
                     }
                     break;
 
@@ -91,7 +91,7 @@ public class ServerConsoleHandler {
                     break;
 
                 default:
-                    System.out.printf("Commande inconnue: '%s'\nVeuillez vous référer à '%s'.\n", cmd, HELP_CMD);
+                    System.out.printf("Commande inconnue: '%s'\nVeuillez vous référer à '%s'\n", cmd, HELP_CMD);
                     break;
             }
         }
@@ -100,16 +100,27 @@ public class ServerConsoleHandler {
     }
 
     private void handleLogin(String username, String password) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
+        RestTemplate restTemplate = new RestTemplate(); // permet de faire des requêtes
+        HttpHeaders httpHeaders = new HttpHeaders(); // headers
 
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        // data de formulaire encodé dans l'URL (ex: "localhost/index?fname=John&lname=Cena")
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED); 
+        // paramètres de la requête
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("username", username);
         map.add("password", password);
 
+        // créé une nouvelle entité http
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
-        restTemplate.postForObject(this.serverUrl + "/user/login", req, HttpSession.class, map);
+        // lance une requête post à un url donné, avec la requête donnée et un type de retour donné
+        restTemplate.postForObject(this.serverUrl + "/user/login", req, JsonObject.class, map);
+    }
+
+    private void handleLogout() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        restTemplate.postForObject(this.serverUrl + "/user/logout", httpHeaders, Void.class);
     }
 
     private void handleRegister(String username, String password) {
@@ -130,11 +141,12 @@ public class ServerConsoleHandler {
         System.out.printf("Pour afficher toutes les commandes : \n\t %s\n", HELP_CMD);
         System.out.printf("Pour quitter le serveur : \n\t %s\n", QUIT_CMD);
         System.out.printf(
-            "Pour se connecter : \n\t %s %s %s (EN COURS ! NE PAS UTILISER)\n", 
-            LOGIN_CMD, LOGIN_ARGS[0],LOGIN_ARGS[1]);
+                "Pour s'inscrire : \n\t %s %s %s\n",
+                REGISTER_CMD, REGISTER_ARGS[0], REGISTER_ARGS[1]);
         System.out.printf(
-            "Pour s'inscrire : \n\t %s %s %s\n", 
-            REGISTER_CMD, REGISTER_ARGS[0], REGISTER_ARGS[1]);
+                "Pour se connecter : \n\t %s %s %s\n",
+                LOGIN_CMD, LOGIN_ARGS[0], LOGIN_ARGS[1]);
+        System.out.printf("Pour se déconnecter : \n\t %s\n", LOGOUT_CMD);
 
         System.out.println("\n");
     }

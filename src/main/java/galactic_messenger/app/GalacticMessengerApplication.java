@@ -45,7 +45,7 @@ public class GalacticMessengerApplication {
                 if (address instanceof Inet4Address){ // Takes ipv4 address and remove useless char
                     String temp = address.toString();
                     ip = temp.replace("/","");
-                    System.out.println(ip);
+                    // System.out.println(ip);
                 }
             }
         }
