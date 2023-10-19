@@ -1,4 +1,4 @@
-package galactic_messenger.app;
+package app;
 
 import java.net.*;
 import java.util.Collections;

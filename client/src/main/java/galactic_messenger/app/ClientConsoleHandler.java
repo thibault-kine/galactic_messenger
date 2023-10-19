@@ -1,4 +1,4 @@
-package galactic_messenger.app.server;
+package app;
 
 import java.net.*;
 import org.springframework.http.*;
