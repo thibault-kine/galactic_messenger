@@ -23,19 +23,16 @@ public class UserService {
     // #region POST
 
     /**
-     * Créé un utilisateur et hashe son mot de passe brut
-     * 
+     * Créé un utilisateur et hashe son mot de passe brut 
      * @param username    - Pseudo utilisateur
      * @param rawPassword - Mot de passe brut. Sera hashé par la suite
      */
-    public void createUser(String username, String rawPassword) {
-        saveUser(new UserEntity(username, hashPassword(rawPassword)));
-    }
-
-    private void saveUser(UserEntity user) {
-        userRepo.save(user);
-        userRepo.flush();
-        System.out.println("ici");
+    public void createUser(String username, String password) {
+        if (isUsernameUnique(username)) {
+            userRepo.saveAndFlush(new UserEntity(username, hashPassword(password)));
+        } else {
+            System.out.println("Cet username est déjà pris");
+        }
     }
 
     private String hashPassword(String rawPassword) {
@@ -46,12 +43,29 @@ public class UserService {
 
     // #region GET
 
-    public UserEntity getById(int id) {
+    public UserEntity findById(int id) {
         return userRepo.findById(id).get();
     }
 
-    public List<UserEntity> getAll() {
+    public List<UserEntity> findAll() {
         return userRepo.findAll();
+    }
+
+    public UserEntity findByLogin(String username, String rawPassword) {
+        UserEntity user = userRepo.findByUsername(username);
+        if(user != null && new BCryptPasswordEncoder().matches(rawPassword, user.getPassword())) {
+            return user;
+        }
+
+        return null;
+    }
+
+    private boolean isUsernameUnique(String username) {
+        if(userRepo.findByUsername(username) != null) {
+            return false;
+        }
+
+        return true;
     }
 
     // #endregion
@@ -59,7 +73,7 @@ public class UserService {
     // #region DELETE
 
     public void delete(int id) {
-        userRepo.delete(getById(id));
+        userRepo.delete(findById(id));
     }
 
     // #endregion
