@@ -45,3 +45,32 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task buildClientJar(type: Jar) {
+    archiveBaseName.set("galactic_messenger_client")
+    version = version
+    from('src/main/java') {
+        include 'galactic_messenger/app/server/ClientConsoleHandler'
+    }
+    manifest {
+        attributes "Main-Class": "galactic_messenger.app.ClientConsoleHandler"
+    }
+    with jar
+}
+
+task buildServerJar(type: Jar) {
+    archiveBaseName.set("galactic_messenger_server")
+    version = version
+    from('src/main/java') {
+        include 'galactic_messenger/app/server/ServerConsoleHandler'
+    }
+    manifest {
+        attributes "Main-Class": "galactic_messenger.app.ServerConsoleHandler"
+    }
+    with jar
+}
+
+task buildAllJars(dependsOn: ['buildClientJar', 'buildServerJar']) {
+    group = 'build'
+    description = "Builds both client and server .jar files"
+}

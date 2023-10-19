@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import galactic_messenger.app.Session;
 import galactic_messenger.app.models.UserEntity;
 import galactic_messenger.app.services.UserService;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 
 @RestController
 @RequestMapping("/user")
