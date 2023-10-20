@@ -1,21 +1,24 @@
 package main.java.galactic_messenger.app;
 
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-
 import java.util.Scanner;
 
-import main.java.galactic_messenger.app.models.UserEntity;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import jakarta.json.JsonObject;
-
+import main.java.galactic_messenger.app.models.UserEntity;
+import main.java.galactic_messenger.app.services.UserService;
 
 
 public class ConsoleHandler {
 
+    UserService userService;
+
+    private String serverIp;
     private int port = 8080;
     private String serverUrl;
 
@@ -31,9 +34,13 @@ public class ConsoleHandler {
 
     final public String LOGOUT_CMD = "/logout";
 
-    public ConsoleHandler(int port) {
+
+    public ConsoleHandler(String serverIp, int port) {
+        this.serverIp = serverIp;
         this.port = port;
-        this.serverUrl = String.format("http://localhost:%d", this.port);
+        this.serverUrl = String.format("http://%s:%d", this.serverIp, this.port);
+
+        this.userService = new UserService();
     }
 
     /**
@@ -51,8 +58,7 @@ public class ConsoleHandler {
                             ? (UserEntity) Session.get("current_user")
                             : null;
 
-            System.out.printf(
-                    "[ %s ] > ", u == null ? "INVITÉ" : u.getUsername().toUpperCase());
+            System.out.printf("%s > ", u == null ? "[ INVITÉ ]" : u.toString());
             String cmd = sc.nextLine();
             String[] args = cmd.split(" ");
 
@@ -135,6 +141,8 @@ public class ConsoleHandler {
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
         restTemplate.postForObject(this.serverUrl + "/user/register", req, Void.class, map);
+
+        userService.register(serverUrl, username, password);
     }
 
     private void handleHelp() {
